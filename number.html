@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Number Converter">
+
+<title>Number System Converter</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+ 
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: linear-gradient(145deg, #eef2f9, #d9e2f0);
+    --card: rgba(255,255,255,0.88);
+    --text: #172033;
+    --soft: #64748b;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --border: #dbe3ef;
+    --output: linear-gradient(145deg, #f0f5ff, #e6efff);
+    --shadow: 0 12px 35px rgba(30,64,175,0.12);
+}
+
+body.dark {
+    --bg: linear-gradient(145deg, #0f172a, #111827);
+    --card: rgba(30,41,59,0.95);
+    --text: #f8fafc;
+    --soft: #cbd5e1;
+    --primary: #60a5fa;
+    --primary-dark: #3b82f6;
+    --border: #475569;
+    --output: linear-gradient(145deg, #172554, #1e293b);
+    --shadow: 0 12px 35px rgba(0,0,0,0.35);
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    transition: 0.3s;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+}
+
+.app {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+h1 {
+    font-size: 25px;
+}
+
+.subtitle {
+    color: var(--soft);
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.icon-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.badge {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 9px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+body.dark .badge {
+    background: #1e3a8a;
+    color: #bfdbfe;
+}
+
+.description {
+    color: var(--soft);
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--soft);
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    gap: 12px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--card);
+    color: var(--text);
+    font-size: 18px;
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--primary);
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 18px 0 28px;
+}
+
+button {
+    border: none;
+    border-radius: 18px;
+    padding: 16px 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+.primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    font-weight: bold;
+}
+
+.secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.results {
+    background: var(--output);
+    padding: 18px;
+    border-radius: 25px;
+    margin-bottom: 25px;
+}
+
+.results-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.result {
+    display: grid;
+    grid-template-columns: 65px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+}
+
+.result:last-child {
+    margin-bottom: 0;
+}
+
+.tag {
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 6px 8px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.result-name {
+    color: var(--soft);
+    font-size: 14px;
+}
+
+.result-value {
+    font-size: 21px;
+    font-weight: bold;
+    word-break: break-all;
+}
+
+.copy {
+    background: transparent;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.install-section {
+    border-top: 1px dashed var(--border);
+    padding-top: 25px;
+    text-align: center;
+}
+
+.install-section h3 {
+    margin-bottom: 15px;
+}
+
+.install-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: white;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.offline-btn {
+    width: 100%;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.history {
+    margin-top: 25px;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.history-header h2 {
+    font-size: 18px;
+}
+
+.clear-history {
+    background: transparent;
+    color: #ef4444;
+    padding: 5px;
+}
+
+.history-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 13px;
+    border-radius: 15px;
+    margin-bottom: 9px;
+    font-size: 14px;
+}
+
+.empty {
+    color: var(--soft);
+    text-align: center;
+    padding: 15px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 400px;
+    background: var(--card);
+    color: var(--text);
+    border-radius: 25px;
+    padding: 25px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close {
+    background: transparent;
+    color: var(--text);
+    font-size: 22px;
+}
+
+.setting {
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.setting:last-child {
+    border-bottom: none;
+}
+
+.setting-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.theme-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.theme-buttons button {
+    flex: 1;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+}
+
+.theme-buttons button.active {
+    background: var(--primary);
+    color: white;
+}
+
+@media(max-width: 600px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .app {
+        padding: 18px;
+        border-radius: 22px;
+    }
+
+    h1 {
+        font-size: 21px;
+    }
+
+    .input-row {
+        grid-template-columns: 1fr;
+    }
+
+    .buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .result {
+        grid-template-columns: 55px 1fr auto;
+    }
+
+    .result-value {
+        font-size: 18px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="app">
+
+    <div class="header">
+
+        <div class="brand">
+            <img src="icon-192.png" class="logo" alt="App Icon">
+
+            <div>
+                <h1>Number System Converter</h1>
+                <div class="subtitle">Fast • Simple • Interactive</div>
+            </div>
+        </div>
+
+        <button class="icon-btn" onclick="openSettings()" title="Settings">
+            ⚙️
+        </button>
+
+    </div>
+
+    <span class="badge">LIVE CONVERTER</span>
+
+    <p class="description">
+        Type a number, choose its base and convert it instantly.
+    </p>
+
+    <label for="numberInput">YOUR NUMBER</label>
+
+    <div class="input-row">
+
+        <input
+            type="text"
+            id="numberInput"
+            placeholder="Enter a number"
+            value="255"
+        >
+
+        <select id="baseSelect">
+            <option value="10">DEC (10)</option>
+            <option value="2">BIN (2)</option>
+            <option value="8">OCT (8)</option>
+            <option value="16">HEX (16)</option>
+        </select>
+
+    </div>
+
+    <div class="buttons">
+
+        <button class="primary" onclick="convertNumber()">
+            🔄 Convert Now
+        </button>
+
+        <button class="secondary" onclick="swapBase()">
+            ⇄ Swap Base
+        </button>
+
+        <button class="secondary" onclick="clearInput()">
+            ✕ Clear
+        </button>
+
+    </div>
+
+    <div class="results">
+
+        <div class="results-title">
+            🟢 CONVERTED VALUES
+        </div>
+
+        <div class="result">
+
+            <span class="tag">BIN</span>
+
+            <div>
+                <div class="result-name">Binary</div>
+                <div class="result-value" id="binaryResult">11111111</div>
+            </div>
+
+            <button class="copy" onclick="copyValue('binaryResult')">
+                📋
+            </button>
+
+        </div>
+
+        <div class="result">
+
+            <span class="tag">OCT</span>
+
+            <div>
+                <div class="result-name">Octal</div>
+                <div class="result-value" id="octalResult">377</div>
+            </div>
+
+            <button class="copy" onclick="copyValue('octalResult')">
+                📋
+            </button>
+
+        </div>
+
+        <div class="result">
+
+            <span class="tag">DEC</span>
+
+            <div>
+                <div class="result-name">Decimal</div>
+                <div class="result-value" id="decimalResult">255</div>
+            </div>
+
+            <button class="copy" onclick="copyValue('decimalResult')">
+                📋
+            </button>
+
+        </div>
+
+        <div class="result">
+
+            <span class="tag">HEX</span>
+
+            <div>
+                <div class="result-name">Hexadecimal</div>
+                <div class="result-value" id="hexResult">FF</div>
+            </div>
+
+            <button class="copy" onclick="copyValue('hexResult')">
+                📋
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- HISTORY -->
+
+    <div class="history">
+
+        <div class="history-header">
+
+            <h2>🕘 Conversion History</h2>
+
+            <button
+                class="clear-history"
+                onclick="clearHistory()">
+                Clear
+            </button>
+
+        </div>
+
+        <div id="historyList">
+            <div class="empty">
+                No conversion history yet.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- INSTALL -->
+
+    <div class="install-section">
+
+        <h3>📦 GET THE APP</h3>
+
+        <button
+            class="install-btn"
+            id="installButton"
+            onclick="installApp()">
+            📱 Install as App
+        </button>
+
+        <button
+            class="offline-btn"
+            onclick="downloadOffline()">
+            🌐 Download HTML (Offline)
+        </button>
+
+        <p style="margin-top:12px;color:var(--soft);font-size:12px;">
+            Works on Android and iOS browsers.
+        </p>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- SETTINGS MODAL -->
+
+<div class="modal" id="settingsModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>⚙️ Settings</h2>
+
+            <button class="close" onclick="closeSettings()">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="setting">
+
+            <div class="setting-title">
+                Appearance
+            </div>
+
+            <div class="theme-buttons">
+
+                <button id="lightBtn" onclick="setTheme('light')">
+                    ☀️ Light
+                </button>
+
+                <button id="darkBtn" onclick="setTheme('dark')">
+                    🌙 Dark
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="setting">
+
+            <div class="setting-title">
+                History
+            </div>
+
+            <p style="color:var(--soft);font-size:14px;">
+                Your conversion history is saved on this device.
+            </p>
+
+        </div>
+
+        <div class="setting">
+
+            <div class="setting-title">
+                About
+            </div>
+
+            <p style="color:var(--soft);font-size:14px;">
+                Number System Converter<br>
+                Decimal • Binary • Octal • Hexadecimal
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let deferredPrompt = null;
+
+/* =========================
+   NUMBER CONVERSION
+========================= */
+
+function convertNumber() {
+
+    const input = document
+        .getElementById("numberInput")
+        .value
+        .trim();
+
+    const base = Number(
+        document.getElementById("baseSelect").value
+    );
+
+    if (!input) {
+        alert("Please enter a number.");
+        return;
+    }
+
+    let decimal;
+
+    try {
+
+        decimal = parseInt(input, base);
+
+        if (isNaN(decimal)) {
+            throw new Error();
+        }
+
+        if (decimal < 0) {
+            throw new Error();
+        }
+
+        document.getElementById("binaryResult")
+            .textContent = decimal.toString(2).toUpperCase();
+
+        document.getElementById("octalResult")
+            .textContent = decimal.toString(8).toUpperCase();
+
+        document.getElementById("decimalResult")
+            .textContent = decimal.toString(10);
+
+        document.getElementById("hexResult")
+            .textContent = decimal.toString(16).toUpperCase();
+
+        saveHistory(input, base, decimal);
+
+    } catch {
+
+        alert(
+            "Invalid number for the selected base."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   SWAP BASE
+========================= */
+
+function swapBase() {
+
+    const select =
+        document.getElementById("baseSelect");
+
+    const current =
+        Number(select.value);
+
+    if (current === 10) {
+        select.value = "2";
+    }
+
+    else if (current === 2) {
+        select.value = "8";
+    }
+
+    else if (current === 8) {
+        select.value = "16";
+    }
+
+    else {
+        select.value = "10";
+    }
+
+    convertNumber();
+
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearInput() {
+
+    document.getElementById("numberInput").value = "";
+
+    document.getElementById("binaryResult")
+        .textContent = "—";
+
+    document.getElementById("octalResult")
+        .textContent = "—";
+
+    document.getElementById("decimalResult")
+        .textContent = "—";
+
+    document.getElementById("hexResult")
+        .textContent = "—";
+
+}
+
+
+/* =========================
+   COPY
+========================= */
+
+function copyValue(id) {
+
+    const value =
+        document.getElementById(id).textContent;
+
+    if (value === "—") return;
+
+    navigator.clipboard.writeText(value)
+        .then(() => {
+            alert("Copied: " + value);
+        });
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function saveHistory(input, base, decimal) {
+
+    let history =
+        JSON.parse(
+            localStorage.getItem("converterHistory") || "[]"
+        );
+
+    const baseNames = {
+        2: "BIN",
+        8: "OCT",
+        10: "DEC",
+        16: "HEX"
+    };
+
+    const item = {
+        input: input,
+        base: baseNames[base],
+        decimal: decimal,
+        binary: decimal.toString(2),
+        octal: decimal.toString(8),
+        hex: decimal.toString(16).toUpperCase(),
+        time: new Date().toLocaleString()
+    };
+
+    history.unshift(item);
+
+    history = history.slice(0, 20);
+
+    localStorage.setItem(
+        "converterHistory",
+        JSON.stringify(history)
+    );
+
+    displayHistory();
+
+}
+
+
+function displayHistory() {
+
+    const list =
+        document.getElementById("historyList");
+
+    const history =
+        JSON.parse(
+            localStorage.getItem("converterHistory") || "[]"
+        );
+
+    if (history.length === 0) {
+
+        list.innerHTML =
+            '<div class="empty">No conversion history yet.</div>';
+
+        return;
+
+    }
+
+    list.innerHTML = history.map(item => `
+
+        <div class="history-item">
+
+            <strong>
+                ${escapeHtml(item.input)}
+                (${item.base})
+            </strong>
+
+            →
+
+            DEC ${item.decimal}
+
+            <br>
+
+            <small style="color:var(--soft);">
+                BIN: ${item.binary}
+                |
+                OCT: ${item.octal}
+                |
+                HEX: ${item.hex}
+            </small>
+
+            <br>
+
+            <small style="color:var(--soft);">
+                ${item.time}
+            </small>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+function clearHistory() {
+
+    if (
+        confirm(
+            "Are you sure you want to clear your history?"
+        )
+    ) {
+
+        localStorage.removeItem(
+            "converterHistory"
+        );
+
+        displayHistory();
+
+    }
+
+}
+
+
+/* =========================
+   SECURITY FOR HISTORY
+========================= */
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
+
+function openSettings() {
+
+    document
+        .getElementById("settingsModal")
+        .classList.add("show");
+
+}
+
+
+function closeSettings() {
+
+    document
+        .getElementById("settingsModal")
+        .classList.remove("show");
+
+}
+
+
+function setTheme(theme) {
+
+    if (theme === "dark") {
+
+        document.body.classList.add("dark");
+
+        localStorage.setItem(
+            "theme",
+            "dark"
+        );
+
+    } else {
+
+        document.body.classList.remove("dark");
+
+        localStorage.setItem(
+            "theme",
+            "light"
+        );
+
+    }
+
+    updateThemeButtons();
+
+}
+
+
+function updateThemeButtons() {
+
+    const theme =
+        localStorage.getItem("theme") || "light";
+
+    document
+        .getElementById("lightBtn")
+        .classList.toggle(
+            "active",
+            theme === "light"
+        );
+
+    document
+        .getElementById("darkBtn")
+        .classList.toggle(
+            "active",
+            theme === "dark"
+        );
+
+}
+
+
+/* =========================
+   INSTALL APP
+========================= */
+
+window.addEventListener(
+    "beforeinstallprompt",
+    event => {
+
+        event.preventDefault();
+
+        deferredPrompt = event;
+
+    }
+);
+
+
+async function installApp() {
+
+    if (deferredPrompt) {
+
+        deferredPrompt.prompt();
+
+        const result =
+            await deferredPrompt.userChoice;
+
+        deferredPrompt = null;
+
+        return;
+
+    }
+
+    alert(
+        "On Android: open your browser menu and choose 'Add to Home screen' or 'Install app'.\n\n" +
+        "On iPhone: open this website in Safari, tap Share, then choose 'Add to Home Screen'."
+    );
+
+}
+
+
+/* =========================
+   OFFLINE DOWNLOAD
+========================= */
+
+function downloadOffline() {
+
+    const html =
+        "<!DOCTYPE html>\n" +
+        document.documentElement.outerHTML;
+
+    const blob =
+        new Blob(
+            [html],
+            { type: "text/html" }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download =
+        "number-system-converter.html";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =========================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================= */
+
+document
+    .getElementById("settingsModal")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === this) {
+                closeSettings();
+            }
+
+        }
+    );
+
+
+/* =========================
+   LOAD SAVED SETTINGS
+========================= */
+
+const savedTheme =
+    localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+}
+
+displayHistory();
+
+updateThemeButtons();
+
+
+/* =========================
+   AUTO CONVERT INITIAL VALUE
+========================= */
+
+convertNumber();
+
+
+/* =========================
+   SERVICE WORKER
+========================= */
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register("service-worker.js")
+                .catch(
+                    error =>
+                        console.log(
+                            "Service worker:",
+                            error
+                        )
+                );
+
+        }
+    );
+
+}
+
+</script>
+
+</body>
+</html>
